@@ -1,87 +1,107 @@
 'use strict';
 
-// ARROW FUNCTIONS
+// this file will contain our JSX - we will manually write this.
 
-//es5
-function square(x) {
-    return x * x;
+console.log('App.js is running');
+
+var app = {
+    title: 'This is a new challenge',
+    subtitle: 'This is the subtitle text',
+    options: []
 };
 
-console.log(square(8));
+var onFormSubmit = function onFormSubmit(e) {
+    // prevents full page reset, or data being passed via the url.
+    e.preventDefault();
+    var option = e.target.elements.option.value;
 
-//es6 - always anonymous - must be assigned to a variable
-// const squareArrow = (x) => {
-//     return x * x;
-// };
-
-// OR it can be written this way
-
-// expression syntax
-var squareArrow = function squareArrow(x) {
-    return x * x;
-};
-
-console.log(squareArrow(9));
-
-// Challenge
-
-// const getFirstName = (fullName) => {
-//     return fullName.split(' ')[0];
-// };
-
-var getFirstName = function getFirstName(fullName) {
-    return fullName.split(' ')[0];
-};
-
-console.log(getFirstName('Wendy Sader'));
-
-//arguments object -  no longer bound with arrow functions
-var add = function add(a, b) {
-    console.log(arguments); // no longer defined in arrow functions
-    return a + b;
-};
-console.log(add(55, 1));
-
-// this keyword - no longer bound 
-var user = {
-    name: 'Corey',
-    cities: ['Mankato', 'Prior Lake', 'Hudson'],
-    printPlacesLived: function printPlacesLived() {
-        var _this = this;
-
-        // this.name won't work in this function...but it will below with the arrow function
-        // this.cities.forEach(function(city) {
-        //     console.log(this.name + " has lived in " + city);
-        // });
-
-        // this.cities.forEach((city) => {
-        //     console.log(this.name + " has lived in " + city);
-        // });
-
-        // const cityMessages = this.cities.map((city) => {
-        //     return this.name + ' has lived in ' + city;
-        // });
-        // return cityMessages;
-
-        return this.cities.map(function (city) {
-            return _this.name + ' has lived in ' + city;
-        });
+    if (option) {
+        app.options.push(option);
+        e.target.elements.option.value = '';
+        renderApp();
     }
 };
 
-console.log(user.printPlacesLived());
-
-// next Challenge 
-var multiplier = {
-    numbers: [1, 2, 3],
-    multiplyBy: 5,
-    multiply: function multiply() {
-        var _this2 = this;
-
-        return this.numbers.map(function (num) {
-            return _this2.multiplyBy * num;
-        });
-    }
+var resetList = function resetList() {
+    app.options = [];
+    renderApp();
 };
 
-console.log(multiplier.multiply());
+// const user = {
+//     name: "Corey Sader",
+//     age: 43,
+//     location: 'Prior Lake, MN'
+// };
+
+// function getLocation(location) {
+//     if(location) {
+//         return <p>Location: {location}</p>;
+//     }
+// }
+
+// const templateTwo = (
+//     <div>
+//         <h1>{user.name ? user.name : "Anonymous"}</h1>
+//         {(user.age && user.age >= 18) && <p>Age: {user.age}</p>}
+//         {getLocation(user.location)}
+//     </div>
+// );
+
+var appRoot = document.getElementById('app');
+
+var renderApp = function renderApp() {
+    // JSX - JavaScript XML - Language Extension - () not necessary
+    var template = React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'h1',
+            null,
+            app.title
+        ),
+        app.subtitle && React.createElement(
+            'p',
+            null,
+            app.subtitle
+        ),
+        React.createElement(
+            'p',
+            null,
+            app.options.length > 0 ? "Here are your options" : "No options"
+        ),
+        React.createElement(
+            'p',
+            null,
+            app.options.length
+        ),
+        React.createElement(
+            'button',
+            { onClick: resetList },
+            'Remove All'
+        ),
+        React.createElement(
+            'ol',
+            null,
+            app.options.map(function (item) {
+                return React.createElement(
+                    'li',
+                    { key: item },
+                    item
+                );
+            })
+        ),
+        React.createElement(
+            'form',
+            { onSubmit: onFormSubmit },
+            React.createElement('input', { type: 'text', name: 'option' }),
+            React.createElement(
+                'button',
+                null,
+                'Add Button'
+            )
+        )
+    );
+    ReactDOM.render(template, appRoot);
+};
+
+renderApp();
