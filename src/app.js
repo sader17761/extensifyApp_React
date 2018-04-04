@@ -20,33 +20,20 @@ const onFormSubmit = (e) => {
     }
 };
 
-const resetList = () => {
+const onRemoveAll = () => {
     app.options = [];
     renderApp();
 };
 
-// const user = {
-//     name: "Corey Sader",
-//     age: 43,
-//     location: 'Prior Lake, MN'
-// };
-
-// function getLocation(location) {
-//     if(location) {
-//         return <p>Location: {location}</p>;
-//     }
-// }
-
-// const templateTwo = (
-//     <div>
-//         <h1>{user.name ? user.name : "Anonymous"}</h1>
-//         {(user.age && user.age >= 18) && <p>Age: {user.age}</p>}
-//         {getLocation(user.location)}
-//     </div>
-// );
+const onMakeDecision = () => {
+    const randomNum = Math.floor(Math.random() * app.options.length);
+    const option = app.options[randomNum];
+    alert(option);
+};
 
 const appRoot = document.getElementById('app');
 
+// this will allow us to re-render our data to the DOM when 'state' changes...
 const renderApp = () => {
     // JSX - JavaScript XML - Language Extension - () not necessary
     const template = (
@@ -55,12 +42,8 @@ const renderApp = () => {
             {app.subtitle && <p>{app.subtitle}</p>}
             <p>{app.options.length > 0 ? "Here are your options" : "No options"}</p>
             <p>{app.options.length}</p>
-            <button onClick={resetList}>Remove All</button>
-            {
-                // numbers.map((number) => {
-                //     return <p key={number}>Number: {number}</p>;
-                // })
-            }
+            <button disabled={app.options.length === 0} onClick={onMakeDecision}>What should I do?</button>
+            <button onClick={onRemoveAll}>Remove All</button>
             <ol>
                 {
                     app.options.map((item) => <li key={item}>{item}</li>)

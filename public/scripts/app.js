@@ -22,33 +22,20 @@ var onFormSubmit = function onFormSubmit(e) {
     }
 };
 
-var resetList = function resetList() {
+var onRemoveAll = function onRemoveAll() {
     app.options = [];
     renderApp();
 };
 
-// const user = {
-//     name: "Corey Sader",
-//     age: 43,
-//     location: 'Prior Lake, MN'
-// };
-
-// function getLocation(location) {
-//     if(location) {
-//         return <p>Location: {location}</p>;
-//     }
-// }
-
-// const templateTwo = (
-//     <div>
-//         <h1>{user.name ? user.name : "Anonymous"}</h1>
-//         {(user.age && user.age >= 18) && <p>Age: {user.age}</p>}
-//         {getLocation(user.location)}
-//     </div>
-// );
+var onMakeDecision = function onMakeDecision() {
+    var randomNum = Math.floor(Math.random() * app.options.length);
+    var option = app.options[randomNum];
+    alert(option);
+};
 
 var appRoot = document.getElementById('app');
 
+// this will allow us to re-render our data to the DOM when 'state' changes...
 var renderApp = function renderApp() {
     // JSX - JavaScript XML - Language Extension - () not necessary
     var template = React.createElement(
@@ -76,7 +63,12 @@ var renderApp = function renderApp() {
         ),
         React.createElement(
             'button',
-            { onClick: resetList },
+            { disabled: app.options.length === 0, onClick: onMakeDecision },
+            'What should I do?'
+        ),
+        React.createElement(
+            'button',
+            { onClick: onRemoveAll },
             'Remove All'
         ),
         React.createElement(
