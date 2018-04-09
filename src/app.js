@@ -1,61 +1,71 @@
-// this file will contain our JSX - we will manually write this.
+console.log("Running app.js");
 
-console.log('App.js is running');
-
-const app = {
-    title: 'This is a new challenge',
-    subtitle: 'This is the subtitle text',
-    options: []
+class IndecisionApp extends React.Component {
+    render() {
+        return (
+            <div>
+                <Header />
+                <Action />
+                <Options />
+                <AddOption />
+            </div>
+        );
+    }
 }
 
-const onFormSubmit = (e) => {
-    // prevents full page reset, or data being passed via the url.
-    e.preventDefault(); 
-    const option = e.target.elements.option.value;
-
-    if(option) {
-        app.options.push(option);
-        e.target.elements.option.value = '';
-        renderApp();
+// using extends here allows us to use everything related to React
+class Header extends React.Component{
+    render() {
+        return (
+            <div>
+                <h1>Indecision</h1>
+                <h2>Put your life in the hands of a computer.</h2>
+            </div>
+        );
     }
-};
+}
 
-const onRemoveAll = () => {
-    app.options = [];
-    renderApp();
-};
+class Action extends React.Component {
+    render() {
+        return (
+            <div>
+                <button>What should I do?</button>
+            </div>
+        );
+    }
+}
 
-const onMakeDecision = () => {
-    const randomNum = Math.floor(Math.random() * app.options.length);
-    const option = app.options[randomNum];
-    alert(option);
-};
+class Options extends React.Component {
+    render() {
+        return (
+            <div>
+                <p>Options component here</p>
+                <Option />
+            </div>
+        );
+    }
+}
 
-const appRoot = document.getElementById('app');
+class Option extends React.Component {
+    render() {
+        return (
+            <div>
+                <ul>
+                    <li>Option component here</li>
+                </ul>
+            </div>
+        );
+    }
+}
 
-// this will allow us to re-render our data to the DOM when 'state' changes...
-const renderApp = () => {
-    // JSX - JavaScript XML - Language Extension - () not necessary
-    const template = (
-        <div>
-            <h1>{app.title}</h1>
-            {app.subtitle && <p>{app.subtitle}</p>}
-            <p>{app.options.length > 0 ? "Here are your options" : "No options"}</p>
-            <p>{app.options.length}</p>
-            <button disabled={app.options.length === 0} onClick={onMakeDecision}>What should I do?</button>
-            <button onClick={onRemoveAll}>Remove All</button>
-            <ol>
-                {
-                    app.options.map((item) => <li key={item}>{item}</li>)
-                }
-            </ol>
-            <form onSubmit={onFormSubmit}> 
-                <input type="text" name="option"/>
-                <button>Add Button</button>
-            </form>
-        </div>
-    );
-    ReactDOM.render(template, appRoot);
-};
+class AddOption extends React.Component {
+    render() {
+        return (
+            <div>
+                <p>AddOption component here</p>
+            </div>
+        );
+    }
+}
 
-renderApp();
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'));
