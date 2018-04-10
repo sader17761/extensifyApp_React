@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8,88 +8,294 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-console.log('buildItVisible.js is running');
+console.log("Running app.js");
 
-var VisibilityToggle = function (_React$Component) {
-    _inherits(VisibilityToggle, _React$Component);
+//stateless functional components don't manage state - only concerned with presentation
+//class based components manage state
 
-    function VisibilityToggle(props) {
-        _classCallCheck(this, VisibilityToggle);
+var IndecisionApp = function (_React$Component) {
+    _inherits(IndecisionApp, _React$Component);
 
-        var _this = _possibleConstructorReturn(this, (VisibilityToggle.__proto__ || Object.getPrototypeOf(VisibilityToggle)).call(this, props));
+    function IndecisionApp(props) {
+        _classCallCheck(this, IndecisionApp);
 
-        _this.handleToggleVisibility = _this.handleToggleVisibility.bind(_this);
+        var _this = _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).call(this, props));
+
+        _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this); //binds to the current instance
+        _this.handlePick = _this.handlePick.bind(_this);
+        _this.handleAddOption = _this.handleAddOption.bind(_this);
         _this.state = {
-            title: "Visibility Toggle",
-            details: "This is where you will find all of the details to this application.",
-            visibility: false
+            options: []
         };
         return _this;
     }
 
-    _createClass(VisibilityToggle, [{
-        key: "handleToggleVisibility",
-        value: function handleToggleVisibility() {
-            this.setState(function (prevState) {
+    _createClass(IndecisionApp, [{
+        key: 'handleDeleteOptions',
+        value: function handleDeleteOptions() {
+            this.setState(function () {
                 return {
-                    visibility: !prevState.visibility
+                    options: []
                 };
             });
         }
     }, {
-        key: "render",
+        key: 'handlePick',
+        value: function handlePick() {
+            //generates a random number between 0 and length of state array (options)
+            var randomNum = Math.floor(Math.random() * this.state.options.length);
+            //randomly selects an option from 'this.state.options' using random number
+            var option = this.state.options[randomNum];
+            console.log(option);
+        }
+    }, {
+        key: 'handleAddOption',
+        value: function handleAddOption(option) {
+            if (!option) {
+                return 'Enter valid value to add item.';
+            } else if (this.state.options.indexOf(option) > -1) {
+                return 'This option already exists.';
+            }
+
+            this.setState(function (prevState) {
+                return {
+                    options: prevState.options.concat(option)
+                };
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var title = 'Indecision';
+            var subtitle = 'Put your life in the hands of a computer!';
+
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(Header, { title: title, subtitle: subtitle }),
+                React.createElement(Action, {
+                    hasOptions: this.state.options.length > 0,
+                    handlePick: this.handlePick
+                }),
+                React.createElement(Options, {
+                    options: this.state.options,
+                    handleDeleteOptions: this.handleDeleteOptions
+                }),
+                React.createElement(AddOption, {
+                    handleAddOption: this.handleAddOption
+                })
+            );
+        }
+    }]);
+
+    return IndecisionApp;
+}(React.Component);
+
+// STATELESS FUNCTIONAL COMPONENT...
+
+
+var Header = function Header(props) {
+    return React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'h1',
+            null,
+            props.title
+        ),
+        React.createElement(
+            'h2',
+            null,
+            props.subtitle
+        )
+    );
+};
+
+// CLASS BASED COMPONENT...
+// class Header extends React.Component{ // using extends here allows us to use everything related to React
+//     render() {
+//         return (
+//             <div>
+//                 <h1>{this.props.title}</h1>
+//                 <h2>{this.props.subtitle}</h2>
+//             </div>
+//         );
+//     }
+// }
+
+// STATELESS FUNCTIONAL COMPONENT...
+var Action = function Action(props) {
+    return React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'button',
+            {
+                onClick: props.handlePick,
+                disabled: !props.hasOptions
+            },
+            'What should I do?'
+        )
+    );
+};
+
+// CLASS BASED COMPONENT...
+// class Action extends React.Component {
+//     render() {
+//         return (
+//             <div>
+//                 <button 
+//                     onClick={this.props.handlePick}
+//                     disabled={!this.props.hasOptions}
+//                 >
+//                     What should I do?
+//                 </button>
+//             </div>
+//         );
+//     }
+// }
+
+// STATELESS FUNCTIONAL COMPONENT...
+var Options = function Options(props) {
+    return React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'button',
+            { onClick: props.handleDeleteOptions },
+            'Remove All'
+        ),
+        React.createElement(
+            'ul',
+            null,
+
+            // props.options.map((option) => <li key={option}>{option}</li>)
+            props.options.map(function (option) {
+                return React.createElement(Option, { key: option, optionText: option });
+            })
+        )
+    );
+};
+
+// CLASS BASED COMPONENT...
+// class Options extends React.Component {
+//     // constructor(props) {
+//     //     super(props);  
+//     //     this.handleRemoveAll = this.handleRemoveAll.bind(this); //allows us access to 'this.props' in our methods...example 'handleRemoveAll()'
+//     // }
+
+//     // handleRemoveAll() {
+//     //     console.log(this.props.options);
+//     //     //alert("handleRemoveAll works!");
+//     // }
+
+//     render() {
+//         return (
+//             <div>
+//                 <button onClick={this.props.handleDeleteOptions}>Remove All</button>
+//                 <ul>
+//                     {
+//                         // this.props.options.map((option) => <li key={option}>{option}</li>)
+//                         this.props.options.map((option) => <Option key={option} optionText={option} />)
+//                     }
+//                 </ul>
+//                 {/* <Option /> */}
+//             </div>
+//         );
+//     }
+// }
+
+// STATELESS FUNCTIONAL COMPONENT...
+var Option = function Option(props) {
+    return React.createElement(
+        'div',
+        null,
+        'Option: ',
+        props.optionText
+    );
+};
+
+// CLASS BASED COMPONENT...
+// class Option extends React.Component {
+//     render() {
+//         return (
+//             <div>
+//                 Option: {this.props.optionText}
+//             </div>
+//         );
+//     }
+// }
+
+// CLASS BASED COMPONENT...
+
+var AddOption = function (_React$Component2) {
+    _inherits(AddOption, _React$Component2);
+
+    function AddOption(props) {
+        _classCallCheck(this, AddOption);
+
+        var _this2 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
+
+        _this2.handleAddOption = _this2.handleAddOption.bind(_this2);
+        _this2.state = {
+            error: undefined
+        };
+        return _this2;
+    }
+
+    _createClass(AddOption, [{
+        key: 'handleAddOption',
+        value: function handleAddOption(e) {
+            e.preventDefault();
+            // gets option from the form
+            var option = e.target.elements.option.value.trim();
+            var error = this.props.handleAddOption(option);
+
+            this.setState(function () {
+                return {
+                    error: error // this is identical to this 'error'
+                };
+            });
+        }
+    }, {
+        key: 'render',
         value: function render() {
             return React.createElement(
-                "div",
+                'div',
                 null,
-                React.createElement(
-                    "h1",
+                this.state.error && React.createElement(
+                    'p',
                     null,
-                    this.state.title
+                    this.state.error
                 ),
                 React.createElement(
-                    "button",
-                    { onClick: this.handleToggleVisibility },
-                    this.state.visibility ? 'Hide Details' : 'Show Details'
-                ),
-                this.state.visibility && React.createElement(
-                    "p",
-                    null,
-                    this.state.details
+                    'form',
+                    { onSubmit: this.handleAddOption },
+                    React.createElement('input', { type: 'text', name: 'option' }),
+                    React.createElement(
+                        'button',
+                        null,
+                        'Add Option'
+                    )
                 )
             );
         }
     }]);
 
-    return VisibilityToggle;
+    return AddOption;
 }(React.Component);
 
-ReactDOM.render(React.createElement(VisibilityToggle, null), document.getElementById('app'));
-
-// const app = {
-//     title: "Visibility Toggle",
-//     details: "This is where you will find all of the details to this application.",
-//     isHidden: true
-// }
-
-// const appRoot = document.getElementById('app');
-
-// const showHide = () => {
-//     app.isHidden = !app.isHidden; //flips boolean value
-//     render();
-// };
-
-// const render = () => {
-//     const template = (
+// this is an example of a 'STATELESS FUNCTIONAL COMPONENT'...faster than class based components...easier to read/write/test
+// const User = (props) => {
+//     return (
 //         <div>
-//             <h1>{app.title}</h1>
-//             <button onClick={showHide}>
-//                 {app.isHidden === true ? "Show Details" : "Hide Details"}
-//             </button>
-//             {app.isHidden === false && <p>{app.details}</p>}
+//             <p>Name: {props.name}</p>
+//             <p>Age: {props.age}</p>
 //         </div>
 //     );
-//     ReactDOM.render(template, appRoot);
 // };
 
-// render();
+// ReactDOM.render(<User name="Corey Sader" />, document.getElementById('app'));
+
+
+ReactDOM.render(React.createElement(IndecisionApp, null), document.getElementById('app'));
