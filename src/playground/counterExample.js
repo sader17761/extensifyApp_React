@@ -50,8 +50,10 @@ class Counter extends React.Component {
 
     componentDidMount() {
         try {
+            // returns a string value that needs to be converted before we set the state...
             const count = parseInt(localStorage.getItem('count'), 10);
-            if(count) {
+            // first checks if count is a number before we set the state...
+            if(!isNaN(count)) {
                 this.setState(() => ({ count }));
             }
         } catch (e) {
@@ -61,6 +63,7 @@ class Counter extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // this checks to see if the values are different before we use localStorage
         if(prevState.count !== this.state.count){
             localStorage.setItem('count', this.state.count);
         }
