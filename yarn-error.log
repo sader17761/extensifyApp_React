@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Corey\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js run build
+  C:\Program Files\nodejs\node.exe C:\Users\Corey\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js run dev-server
 
 PATH: 
   C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Users\Corey\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\Corey\AppData\Roaming\npm
@@ -21,22 +21,23 @@ npm manifest:
     "license": "MIT",
     "scripts": {
       "serve": "live-server public/",
-      "build": "webpack --watch",
-      "build-babel": "babel src/app.js --out-file=public/scripts/app.js --presets=env,react --watch"
+      "build": "webpack",
+      "dev-server": "webpack-dev-server"
     },
     "dependencies": {
       "babel-cli": "^6.26.0",
       "babel-core": "^6.26.0",
-      "babel-loader": "^7.1.4",
       "babel-preset-env": "^1.5.2",
       "babel-preset-react": "^6.24.1",
       "live-server": "^1.2.0",
       "react": "^16.3.1",
       "react-dom": "^16.3.1",
       "validator": "^9.4.1",
-      "webpack": "^4.5.0"
+      "webpack": "^4.5.0",
+      "webpack-dev-server": "^3.1.3"
     },
     "devDependencies": {
+      "babel-loader": "^7.1.4",
       "webpack-cli": "^2.0.14"
     }
   }
@@ -5240,7 +5241,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: C:\WINDOWS\system32\cmd.exe
-  Arguments: /d /s /c webpack --watch
+  Arguments: /d /s /c webpack-dev-server
   Directory: C:\Users\Corey\Desktop\React-Redux\IndecisionApp_React
   Output:
   
