@@ -1,15 +1,20 @@
 import React from 'react';
 
 export default class AddOption extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleAddOption = this.handleAddOption.bind(this);
-        this.state = {
-            error: undefined
-        }
-    }
+    // class binding syntax (to use, we needed to install 'npm install babel-plugin-transform-class-properties')
+    state = {
+        error: undefined
+    };
+    // the above replaces this way of doing things...
+    // constructor(props) {
+    //     super(props);
+    //     this.handleAddOption = this.handleAddOption.bind(this);
+    //     this.state = {
+    //         error: undefined
+    //     }
+    // }
 
-    handleAddOption(e) {
+    handleAddOption = (e) => {
         e.preventDefault();
         
         const option = e.target.elements.option.value.trim();
@@ -20,7 +25,7 @@ export default class AddOption extends React.Component {
         if(!error){
             e.target.elements.option.value = '';
         }
-    }
+    };
 
     render() {
         return (
