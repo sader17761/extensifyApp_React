@@ -1,0 +1,10 @@
+// we'll be using 'rem' instead of 'pixels' for this application
+
+html {
+    font-size: 62.5%; //converts to a usable base 10 font size... example 2.2rem equals 22px
+}
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1.6rem;
+}
