@@ -1,7 +1,15 @@
 import React from 'react';
 
-const EditExpensePage = () => (
-    <div>This is from my Edit component.</div>
-);
+// const EditExpensePage = () => (
+//     <div>This is from my Edit component.</div>
+// );
+
+// this will allow us to view 'props' that react router has available to us.
+const EditExpensePage = (props) => {
+    console.log(props);
+    return (
+        <div>Editing the expense with id of: {props.match.params.id}</div>
+    );
+};
 
 export default EditExpensePage;
