@@ -1,9 +1,9 @@
-// this is all NODE script...
+// this is all NODEJS script...
 const path = require('path');
 
 // entry and output points
 module.exports = {
-    entry: './src/playground/redux101.js', // working app -> './src/app.js'
+    entry: './src/playground/redux-expensify.js', // working app should be set to -> './src/app.js'
     output: {
         path: path.join(__dirname, 'public'),
         filename: 'bundle.js'
