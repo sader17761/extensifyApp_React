@@ -34,16 +34,32 @@ const editExpense = (id, updates) => ({
 });
 
 // SET_TEXT_FILTER (action generator)
-const setTextFilter = (text = '') => ({ // if value passed in, use that...if not, use an empty string
+const setTextFilter = (text = '') => ({ // if a value passed in, use it...if not, use an empty string
     type: 'SET_TEXT_FILTER',
     text: text
 });
 
-// SORT_BY_DATE
-// SORT_BY_AMOUNT
-// SET_START_DATE
-// SET_END_DATE
+// SORT_BY_DATE (action generator)
+const sortByDate = () => ({
+    type: 'SORT_BY_DATE',
+});
 
+// SORT_BY_AMOUNT (action generator)
+const sortByAmount = () => ({
+    type: 'SORT_BY_AMOUNT',
+});
+
+// SET_START_DATE (action generator)
+const setStartDate = (startDate) => ({ // if a value passed in, use it...if not, undefined will be used (set as default below)
+    type: 'SET_START_DATE',
+    startDate: startDate
+});
+
+// SET_END_DATE (action generator)
+const setEndDate = (endDate) => ({ // if a value passed in, use it...if not, undefined will be used (set as default below)
+    type: 'SET_END_DATE',
+    endDate: endDate
+});
 
 // EXPENSES REDUCER (based on demoState below)...
 const expensesReducerDefaultState = [];
@@ -70,14 +86,13 @@ const expensesReducer = (state = expensesReducerDefaultState, action) => {
                 } else {
                     return expense;
                 }
-                
             });
         default: 
             return state;
     }
 };
 
-// FILTERS REDUCER (based on demoState below)...
+// FILTERS REDUCER (based on demoState below)...these are the defaults we set
 const filtersReducersDefaultStore = { 
     text: '', 
     sortBy: 'date', 
@@ -91,7 +106,27 @@ const filtersReducer = (state = filtersReducersDefaultStore, action) => {
             return {
                 ...state, // grabs all exsisting properties
                 text: action.text // updates/overrides 'text' property passed down
-            }
+            };
+        case 'SORT_BY_AMOUNT':
+            return {
+                ...state, // grabs all exsisting values from state, using the spread operator
+                sortBy: 'amount' // setting 'sortBy' to the string value 'amount'
+            };
+        case 'SORT_BY_DATE':
+            return {
+                ...state, // grabs all exsisting values from state, using the spread operator
+                sortBy: 'date' // setting 'sortBy' to the string value 'date'
+            };
+        case 'SET_START_DATE':
+            return {
+                ...state, // grabs all exsisting values from state, using the spread operator
+                startDate: action.startDate // updates/overrides 'startDate' property passed down
+            };
+        case 'SET_END_DATE':
+            return {
+                ...state, // grabs all exsisting values from state, using the spread operator
+                endDate: action.endDate // updates/overrides 'startDate' property passed down
+            };
         default:
             return state;
     }
@@ -110,16 +145,24 @@ store.subscribe(() => {
     console.log(store.getState());
 });
 
-const expenseOne = store.dispatch(addExpense({description: 'rent', note: 'for this months rent', amount: 60000}));
-const expenseTwo = store.dispatch(addExpense({description: 'coffee', note: 'for my morning boost', amount: 300}));
-const expenseThree = store.dispatch(addExpense({description: 'gas', note: 'for the jeep', amount: 4550}));
+// const expenseOne = store.dispatch(addExpense({description: 'rent', note: 'for this months rent', amount: 60000}));
+// const expenseTwo = store.dispatch(addExpense({description: 'coffee', note: 'for my morning boost', amount: 300}));
+// const expenseThree = store.dispatch(addExpense({description: 'gas', note: 'for the jeep', amount: 4550}));
 
-store.dispatch(removeExpense({ id: expenseOne.expenses.id }));
+// store.dispatch(removeExpense({ id: expenseOne.expenses.id }));
 
-store.dispatch(editExpense(expenseTwo.expenses.id, {amount: 500}));
+// store.dispatch(editExpense(expenseTwo.expenses.id, {amount: 500}));
 
-store.dispatch(setTextFilter('rent'));
-store.dispatch(setTextFilter());
+// store.dispatch(setTextFilter('rent'));
+// store.dispatch(setTextFilter());
+
+// store.dispatch(sortByAmount());
+// store.dispatch(sortByDate());
+
+store.dispatch(setStartDate(125));
+store.dispatch(setStartDate());
+store.dispatch(setEndDate(1250));
+
 
 
 // what we're tracking...
