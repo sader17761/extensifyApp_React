@@ -132,6 +132,19 @@ const filtersReducer = (state = filtersReducersDefaultStore, action) => {
     }
 };
 
+// NOTE: startDate and endDate...are timestamps, which count in milliseconds (example: 33400, 10, -203)...0 = January 1st, 1970 (known as: unix epoch)
+
+// GET VISIBLE EXPENSES...here we are using destructuring to sort the data...
+const getVisibleExpenses = (expenses, {text, sortBy, startDate, endDate}) => {
+    return expenses.filter((expense) => {
+        const startDateMatch = typeof startDate !== 'number' || expense.createdAt >= startDate; // if createdAt date is greater than or equal to startDate -> SHOW
+        const endDateMatch = typeof endDate !== 'number' || expense.createdAt <= endDate; // if createdAt date is less than or equal to endDate -> SHOW
+        const textMatch = expense.description.toLowerCase().includes(text.toLowerCase());
+
+        return startDateMatch && endDateMatch && textMatch;
+    });
+}
+
 // STORE CREATION
 const store = createStore(
     combineReducers({
@@ -142,30 +155,32 @@ const store = createStore(
 
 // watches state for changes
 store.subscribe(() => {
-    console.log(store.getState());
+    const state = store.getState();
+    const visibleExpenses = getVisibleExpenses(state.expenses, state.filters);
+    console.log('Visible Expenses: ', visibleExpenses);
 });
 
-// const expenseOne = store.dispatch(addExpense({description: 'rent', note: 'for this months rent', amount: 60000}));
-// const expenseTwo = store.dispatch(addExpense({description: 'coffee', note: 'for my morning boost', amount: 300}));
-// const expenseThree = store.dispatch(addExpense({description: 'gas', note: 'for the jeep', amount: 4550}));
+const expenseOne = store.dispatch(addExpense({description: 'rent', note: 'for this months rent', amount: 60000, createdAt: 1000})); 
+const expenseTwo = store.dispatch(addExpense({description: 'coffee', note: 'for my morning boost', amount: 300, createdAt: -1000}));
+const expenseThree = store.dispatch(addExpense({description: 'April Rent', note: 'for the jeep', amount: 900}));
 
 // store.dispatch(removeExpense({ id: expenseOne.expenses.id }));
 
 // store.dispatch(editExpense(expenseTwo.expenses.id, {amount: 500}));
 
-// store.dispatch(setTextFilter('rent'));
+store.dispatch(setTextFilter('rent'));
 // store.dispatch(setTextFilter());
 
 // store.dispatch(sortByAmount());
 // store.dispatch(sortByDate());
 
-store.dispatch(setStartDate(125));
-store.dispatch(setStartDate());
-store.dispatch(setEndDate(1250));
+// store.dispatch(setStartDate(0));   // if createdAt(1000) >= startDate(0) ->  SHOW ALL 'createdAt' that are greater than 'startDate'
+// store.dispatch(setStartDate());
+// store.dispatch(setEndDate(999));   // if createdAt(1000) <= endDate(999) ->  SHOW ALL 'createdAt' that are less than 'endDate'
 
 
 
-// what we're tracking...
+// This is our 'STATE'...this is what we're tracking.
 const demoState = {
     expenses: [{
         id: 'abc',
