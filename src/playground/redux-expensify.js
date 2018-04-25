@@ -142,10 +142,20 @@ const getVisibleExpenses = (expenses, {text, sortBy, startDate, endDate}) => {
         const textMatch = expense.description.toLowerCase().includes(text.toLowerCase());
 
         return startDateMatch && endDateMatch && textMatch;
+    }).sort((a, b) => {
+        // sorts by highest item first...
+        switch (sortBy) {
+            case 'date':
+                return a.createdAt < b.createdAt ? 1 : -1;
+            case 'amount':
+                return a.amount < b.amount ? 1 : -1;   
+            default:
+                return 0;
+        }
     });
 }
 
-// STORE CREATION
+// STORE CREATION...and COMBINING Reducers
 const store = createStore(
     combineReducers({
         expenses: expensesReducer,
@@ -160,18 +170,18 @@ store.subscribe(() => {
     console.log('Visible Expenses: ', visibleExpenses);
 });
 
-const expenseOne = store.dispatch(addExpense({description: 'rent', note: 'for this months rent', amount: 60000, createdAt: 1000})); 
+const expenseOne = store.dispatch(addExpense({description: 'rent', note: 'for this months rent', amount: 60000, createdAt: -21000})); 
 const expenseTwo = store.dispatch(addExpense({description: 'coffee', note: 'for my morning boost', amount: 300, createdAt: -1000}));
-const expenseThree = store.dispatch(addExpense({description: 'April Rent', note: 'for the jeep', amount: 900}));
+const expenseThree = store.dispatch(addExpense({description: 'gas', note: 'for the jeep', amount: 900, createdAt: -1900}));
 
 // store.dispatch(removeExpense({ id: expenseOne.expenses.id }));
 
 // store.dispatch(editExpense(expenseTwo.expenses.id, {amount: 500}));
 
-store.dispatch(setTextFilter('rent'));
+// store.dispatch(setTextFilter('rent'));
 // store.dispatch(setTextFilter());
 
-// store.dispatch(sortByAmount());
+store.dispatch(sortByAmount());
 // store.dispatch(sortByDate());
 
 // store.dispatch(setStartDate(0));   // if createdAt(1000) >= startDate(0) ->  SHOW ALL 'createdAt' that are greater than 'startDate'
