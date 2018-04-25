@@ -1,7 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'; // 'Provider' will allow us to provide the 'store' to all of our components that make up our application.
 import AppRouter from './routers/AppRouter';
+import configureStore from './store/configureStore';
+import { addExpense } from './actions/expenses';
+import { setTextFilter } from './actions/filters';
+import getVisibleExpenses from './selectors/expenses';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 
-ReactDOM.render(<AppRouter />, document.getElementById('app'));
+const store = configureStore(); // this will retrieve our current 'state' from the store in 'configureStore'
+
+/* --> CHALLENGE <-- */
+// addExpense -> water bill
+// addExpense -> gas bill
+// getTextFilter -> bill ( 2 items ) -> water ( 1 item )
+// getVisibleExpenses -> print visible ones to the screen
+
+// watches 'STATE' for changes...NOTE: this MUST come before the creation of expenses...OR, without the subscribe we can add the contents below the dispatch calls
+store.subscribe(() => {
+    const state = store.getState();
+    const visibleExpenses = getVisibleExpenses(state.expenses, state.filters);
+    console.log('Visible Expenses: ', visibleExpenses);
+});
+
+store.dispatch(addExpense({description: 'Water Bill', amount: 23795, note: '1st quarter 2018 water bill'}));
+store.dispatch(addExpense({description: 'Gas Bill', amount: 9267, note: 'April 2018 gas bill'}));
+store.dispatch(setTextFilter('Water'));
+
+/* NOT NEEDED FOR OUR FINAL CODE...
+// this is just an example using time.
+// setTimeout(() => {
+//     store.dispatch(setTextFilter('Rent'));
+// }, 3000);
+*/
+
+// const state = store.getState();
+// const visibleExpenses = getVisibleExpenses(state.expenses, state.filters);
+// console.log('Visible Expenses: ', visibleExpenses);
+/* --> END OF CHALLENGE <-- */
+
+const jsx = (
+    <Provider store={store}>
+        <AppRouter />
+    </Provider>
+);
+
+ReactDOM.render(jsx, document.getElementById('app'));
