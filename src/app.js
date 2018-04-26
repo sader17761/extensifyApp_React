@@ -24,16 +24,16 @@ store.subscribe(() => {
     console.log('Visible Expenses: ', visibleExpenses);
 });
 
-store.dispatch(addExpense({description: 'Water Bill', amount: 23795, note: '1st quarter 2018 water bill'}));
-store.dispatch(addExpense({description: 'Gas Bill', amount: 9267, note: 'April 2018 gas bill'}));
-store.dispatch(setTextFilter('Water'));
+store.dispatch(addExpense({description: 'Water Bill', amount: 23795, note: '1st quarter 2018 water bill', createdAt: 555000}));
+store.dispatch(addExpense({description: 'Gas Bill', amount: 9267, note: 'April 2018 gas bill', createdAt: 26500}));
+store.dispatch(setTextFilter('bill'));
 
-/* NOT NEEDED FOR OUR FINAL CODE...
+// NOT NEEDED FOR OUR FINAL CODE...
 // this is just an example using time.
 // setTimeout(() => {
-//     store.dispatch(setTextFilter('Rent'));
+//     store.dispatch(setTextFilter('gas'));
 // }, 3000);
-*/
+
 
 // const state = store.getState();
 // const visibleExpenses = getVisibleExpenses(state.expenses, state.filters);
