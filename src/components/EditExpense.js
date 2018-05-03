@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import ExpenseForm from './ExpenseForm';
 
 // const EditExpensePage = () => (
 //     <div>This is from my Edit component.</div>
@@ -6,10 +8,25 @@ import React from 'react';
 
 // this will allow us to view 'props' that react router has available to us.
 const EditExpensePage = (props) => {
-    console.log(props);
     return (
-        <div>Editing the expense with id of: {props.match.params.id}</div>
+        <div>
+            <ExpenseForm
+                expense={props.expense}
+                onSubmit={(expense) => {
+                    console.log('Updated: ', expense);
+                }}
+            />
+        </div>
     );
 };
 
-export default EditExpensePage;
+// this gives us access to the expense we clicked on...
+const mapStateToProps = (state, props) => {
+    return {
+        expense: state.expenses.find((expense) => {
+            return expense.id === props.match.params.id;
+        })
+    };
+};
+
+export default connect(mapStateToProps)(EditExpensePage);
